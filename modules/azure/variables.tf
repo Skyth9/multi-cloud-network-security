@@ -5,3 +5,5 @@ variable naming_prefix {
 variable az_user {}
 
 variable az_pass {}
+
+variable shared_key {}
