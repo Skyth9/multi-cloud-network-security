@@ -16,13 +16,7 @@ variable "environment" {
   default = "lab"
 }
 
-variable "user" {
-  type    = string
-  default = "dobri"
-}
+variable "az_user" {}
 
-variable "pass" {
-  type      = string
-  sensitive = true
-  default ="123"
-}
+
+variable "az_pass" {}

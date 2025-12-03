@@ -12,6 +12,7 @@ resource "azurerm_subnet" "s1-prod" {
   resource_group_name  = azurerm_resource_group.rg-spoke.name
   virtual_network_name = azurerm_virtual_network.S1.name
   address_prefixes     = ["10.21.0.0/25"]
+  default_outbound_access_enabled = false
 }
 
 resource "azurerm_subnet" "s1-dev" {
@@ -19,4 +20,5 @@ resource "azurerm_subnet" "s1-dev" {
   resource_group_name  = azurerm_resource_group.rg-spoke.name
   virtual_network_name = azurerm_virtual_network.S1.name
   address_prefixes     = ["10.21.0.128/25"]
+  default_outbound_access_enabled = false
 }
