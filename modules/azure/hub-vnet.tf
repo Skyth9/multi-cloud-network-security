@@ -1,5 +1,5 @@
 # =============== VNETs ===============
-resource "azurerm_virtual_network" "HUB" {
+resource "azurerm_virtual_network" "hub-vnet" {
   name                = "${var.naming_prefix}-hub-vnet"
   location            = azurerm_resource_group.rg-hub.location
   resource_group_name = azurerm_resource_group.rg-hub.name
@@ -11,7 +11,7 @@ resource "azurerm_virtual_network" "HUB" {
 resource "azurerm_subnet" "hub-appgw" {
   name                 = "${var.naming_prefix}-subnet-appgw"
   resource_group_name = azurerm_resource_group.rg-hub.name
-  virtual_network_name = azurerm_virtual_network.HUB.name
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
   address_prefixes     = ["172.21.1.0/26"]
   default_outbound_access_enabled = false
 }
@@ -19,7 +19,7 @@ resource "azurerm_subnet" "hub-appgw" {
 resource "azurerm_subnet" "hub-fw" {
   name                 = "AzureFirewallSubnet"
   resource_group_name = azurerm_resource_group.rg-hub.name
-  virtual_network_name = azurerm_virtual_network.HUB.name
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
   address_prefixes     = ["172.21.0.64/26"]
   default_outbound_access_enabled = false
 }
@@ -27,7 +27,7 @@ resource "azurerm_subnet" "hub-fw" {
 resource "azurerm_subnet" "hub-fw-mgmt" {
   name                 = "AzureFirewallManagementSubnet"
   resource_group_name = azurerm_resource_group.rg-hub.name
-  virtual_network_name = azurerm_virtual_network.HUB.name
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
   address_prefixes     = ["172.21.0.128/26"]
   default_outbound_access_enabled = false
 }
@@ -35,7 +35,7 @@ resource "azurerm_subnet" "hub-fw-mgmt" {
 resource "azurerm_subnet" "hub-vpn" {
   name                 = "GatewaySubnet"
   resource_group_name = azurerm_resource_group.rg-hub.name
-  virtual_network_name = azurerm_virtual_network.HUB.name
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
   address_prefixes     = ["172.21.0.0/26"]
   default_outbound_access_enabled = false
 }
@@ -43,7 +43,15 @@ resource "azurerm_subnet" "hub-vpn" {
 resource "azurerm_subnet" "hub-bstn" {
   name                 = "AzureBastionSubnet"
   resource_group_name = azurerm_resource_group.rg-hub.name
-  virtual_network_name = azurerm_virtual_network.HUB.name
-  address_prefixes     = ["172.21.0.128/26"]
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
+  address_prefixes     = ["172.21.0.192/26"]
+  default_outbound_access_enabled = false
+}
+
+resource "azurerm_subnet" "hub-vm-fw" {
+  name                 = "hub-vm-fw"
+  resource_group_name = azurerm_resource_group.rg-hub.name
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
+  address_prefixes     = ["172.21.255.0/24"]
   default_outbound_access_enabled = false
 }

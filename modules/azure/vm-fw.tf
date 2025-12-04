@@ -44,7 +44,7 @@ resource "azurerm_network_interface" "vm-fw-nic" {
 
   ip_configuration {
     name                          = "vm-fw-nic-conf"
-    subnet_id                     = azurerm_subnet.hub-fw.id
+    subnet_id                     = azurerm_subnet.hub-vm-fw.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.vm-fw1-pip.id
   }
