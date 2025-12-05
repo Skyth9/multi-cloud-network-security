@@ -6,7 +6,8 @@ module "azure" {
     az_pass = var.az_pass
     shared_key = var.shared_key
 }
-
+/*
 module "aws" {
     source = "./modules/aws"
 }
+*/
