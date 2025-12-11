@@ -49,3 +49,25 @@ resource "azurerm_network_interface" "vm-fw-nic" {
     public_ip_address_id          = azurerm_public_ip.vm-fw1-pip.id
   }
 }
+
+
+resource "azurerm_virtual_machine_extension" "run_script" {
+  name                 = "script"
+  virtual_machine_id   = azurerm_linux_virtual_machine.vm-fw.id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
+
+  settings = <<SETTINGS
+    {
+      "commandToExecute": "cat <<EOF | sudo tee /etc/sysctl.conf net.ipv4.ip_forward = 1 EOF",
+      "commandToExecute": "sudo sysctl -p /etc/sysctl.conf",
+      "commandToExecute": "sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE",
+      "commandToExecute": "sudo apt update",
+      "commandToExecute": "echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections",
+      "commandToExecute": "echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections",
+      "commandToExecute": "sudo apt install iptables-persistent"
+    }
+  SETTINGS
+
+}

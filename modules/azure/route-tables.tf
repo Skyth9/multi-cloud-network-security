@@ -29,6 +29,20 @@ resource "azurerm_route_table" "prod-rt" {
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = azurerm_network_interface.vm-fw-nic.ip_configuration[0].private_ip_address
   }
+
+  route {
+    name                   = "local"
+    address_prefix         = "10.21.0.0/25"
+    next_hop_type          = "VnetLocal"
+  }
+
+  route {
+    name                   = "vnet-to-fw"
+    address_prefix         = "10.21.0.0/16"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = azurerm_network_interface.vm-fw-nic.ip_configuration[0].private_ip_address
+  }
+
 }
 
 resource "azurerm_subnet_route_table_association" "prod-rt-assoc" {
@@ -45,6 +59,19 @@ resource "azurerm_route_table" "dev-rt" {
   route {
     name                   = "def"
     address_prefix         = "0.0.0.0/0"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = azurerm_network_interface.vm-fw-nic.ip_configuration[0].private_ip_address
+  }
+
+  route {
+    name                   = "local"
+    address_prefix         = "10.21.0.128/25"
+    next_hop_type          = "VnetLocal"
+  }
+
+  route {
+    name                   = "vnet-to-fw"
+    address_prefix         = "10.21.0.0/16"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = azurerm_network_interface.vm-fw-nic.ip_configuration[0].private_ip_address
   }
